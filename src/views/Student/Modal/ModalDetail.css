@@ -1,0 +1,49 @@
+.student-button-line{
+    display: flex;
+    justify-content: space-between;
+}
+
+.upload-image-btn{
+    color: #049F0C !important;
+    background-color: transparent;
+    opacity: 1;
+    font-weight: bold;
+    text-decoration: none;
+}
+.upload-image-btn:hover{
+    opacity: 0.8;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.circle-plus-icon{
+     margin: 0 6px;          
+}
+
+.button-update-line{
+    display: flex;
+    justify-content: space-between;
+}
+
+.pencil-icon, .trash-icon {
+    font-size: 40px;
+    margin: 10px;
+}
+
+.pencil-icon{
+    color:#3472F7;
+}
+
+.pencil-icon:hover{
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.trash-icon{
+    color: #FF4A55;
+}
+
+.trash-icon:hover{
+    opacity: 0.8;
+    cursor: pointer;
+}

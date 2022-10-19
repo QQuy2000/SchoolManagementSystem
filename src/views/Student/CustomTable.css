@@ -1,0 +1,18 @@
+.detail-student {
+    color: #000;
+    text-decoration: none;
+}
+
+.detail-student:hover {
+    cursor: pointer;
+    text-decoration: underline;
+    color: #3372F7
+}
+
+.list-course{
+    text-decoration: none;
+    color: #000;
+}
+.list-course:hover{
+    color: #000;
+}
