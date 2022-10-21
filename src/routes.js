@@ -21,8 +21,7 @@ import TableList from "views/TableList.js";
 import Typography from "views/Typography.js";
 import Icons from "views/Icons.js";
 import Notifications from "views/Notifications.js";
-import Upgrade from "views/Upgrade.js";
-import Student from "views/Student/CustomTable";
+import Student from "views/Student/Student";
 const dashboardRoutes = [
   // {
   //   upgrade: true,

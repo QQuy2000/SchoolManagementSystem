@@ -1,0 +1,83 @@
+.detail-student-modal-header{
+    padding: 0px 24px !important;
+    display: flex;
+    justify-content: space-between;
+}
+
+.detail-student-modal-title{
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.detail-student-modal-body{
+    border-top: 1px solid #ece9ea;
+}
+.student-button-line{
+    display: flex;
+    justify-content: space-between;
+}
+
+.upload-image-btn{
+    color: #049F0C !important;
+    background-color: transparent;
+    opacity: 1;
+    font-weight: bold;
+    text-decoration: none;
+}
+.upload-image-btn:hover{
+    opacity: 0.8;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.circle-plus-icon{
+     margin: 0 6px;          
+}
+
+.button-update-line{
+    display: flex;
+    justify-content: space-between;
+}
+
+.pencil-icon, .trash-icon, .check-icon, .xmark-icon {
+    font-size: 40px;
+    margin: 10px;
+}
+
+.pencil-icon{
+    color:#3472F7;
+}
+
+.pencil-icon:hover{
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.check-icon{
+    color: #049F0C;
+    display: none;
+}
+
+.check-icon:hover{
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.trash-icon{
+    color: #FF4A55;
+}
+
+.trash-icon:hover{
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.xmark-icon{
+    color: #FF4A55;
+    display: none;
+}
+
+.xmark-icon:hover{
+    opacity: 0.8;
+    cursor: pointer;
+}
