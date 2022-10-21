@@ -28,12 +28,13 @@ const BadgeStatus = ({ values }) => {
 function DetailStudentModal({isOpen, hideModal, dataModal}){
     const [editStudent, setEditStudent] = useState(false);
     const [editFormData, setEditFormData] = useState({
-        fullname: "",
-        birthday: "",
-        signupdate: "",
-        familycontact: "",
-        parenemail: "",
-        phonenumber: "",
+        fullName: "",
+        dob: "",
+        signupDate: "",
+        phoneNum: "",
+        familyContact: "",
+        parentEmail: "",
+        status: "",
     })
     const hanleClickEditBtn = () => {
         setEditStudent(true)
@@ -42,13 +43,13 @@ function DetailStudentModal({isOpen, hideModal, dataModal}){
         document.getElementsByClassName("check-icon")[0].style.display = 'inline-block';
         document.getElementsByClassName("xmark-icon")[0].style.display = 'inline-block';
         const formValues = {
-            fullname: dataModal.fullname,
-            birthday: dataModal.birthday,
-            signupdate: dataModal.signupdate,
-            familycontact: dataModal.familycontact,
-            parenemail: dataModal.parenemail,
-            phonenumber: dataModal.phonenumber,
-            status: dataModal.status
+            fullName: dataModal.fullName,
+            dob: dataModal.dob,
+            signupDate: dataModal.signupDate,
+            phoneNum: dataModal.phoneNum,
+            familyContact: dataModal.familyContact,
+            parentEmail: dataModal.parentEmail,
+            status: dataModal.status,
         }
         setEditFormData(formValues);
     }
@@ -71,6 +72,24 @@ function DetailStudentModal({isOpen, hideModal, dataModal}){
         document.getElementsByClassName("xmark-icon")[0].style.display = 'none';
         document.getElementsByClassName("pencil-icon")[0].style.display = 'inline-block';
         document.getElementsByClassName("trash-icon")[0].style.display = 'inline-block';
+    }
+
+    const handleCancelEdit = () => {
+        setEditStudent(false)
+        document.getElementsByClassName("check-icon")[0].style.display = 'none';
+        document.getElementsByClassName("xmark-icon")[0].style.display = 'none';
+        document.getElementsByClassName("pencil-icon")[0].style.display = 'inline-block';
+        document.getElementsByClassName("trash-icon")[0].style.display = 'inline-block';
+        const formValues = {
+            fullName: "",
+            dob: "",
+            signupDate: "",
+            phoneNum: "",
+            familyContact: "",
+            parentEmail: "",
+            status: "",
+        }
+        setEditFormData(formValues);
     }
 
     return(
@@ -114,7 +133,7 @@ function DetailStudentModal({isOpen, hideModal, dataModal}){
                             </div>
                             <div className="button-delete-student">
                                 <FontAwesomeIcon className="trash-icon" icon={faTrashCan} />
-                                <FontAwesomeIcon className="xmark-icon" icon={faSquareXmark} />
+                                <FontAwesomeIcon onClick={handleCancelEdit} className="xmark-icon" icon={faSquareXmark} />
                             </div>
                         </div>
                     </div>

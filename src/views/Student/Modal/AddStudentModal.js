@@ -1,25 +1,36 @@
-import React from "react";
+import React, {useState} from "react";
 import { Button, Form, CloseButton, Modal, Row, Col } from "react-bootstrap";
 
 function AddStudentModal({ isOpenAdd, 
                     hideOpenAdd, 
-                    id, 
-                    updateSkill, 
-                    setUpdateSkill,
-                    updateLevel,
-                    setUpdateLevel,
-                    updateQuestion,
-                    setUpdateQuestion,
-                    updateAnswer,
-                    setUpdateAnswer,
                     onSubmitAdd
                     }){
+    const moduleList = ["Active", "Inactive", "Trial"]
+    const [addFormData, setAddFormData] = useState({
+        fullname: "",
+        birthday: "",
+        signupdate: "",
+        familycontact: "",
+        parenemail: "",
+        phonenumber: "",
+    })
+    const handleAddFormChange = (event) => {
+        event.preventDefault();
+
+        const fieldName = event.target.getAttribute("name");
+        const fieldValue = event.target.value;
+
+        const newFormData = {...addFormData};
+        newFormData[fieldName] = fieldValue;
+
+        setAddFormData(newFormData) 
+    }
     return (
         <>
             <Modal 
                 show={isOpenAdd} 
                 onHide={hideOpenAdd}
-                size="lg"
+                size="xl"
                 // fullscreen={true}
                 >
                 <Modal.Header style={{padding: '0 24px', display: 'flex', justifyContent:'space-between'}}>
@@ -30,109 +41,155 @@ function AddStudentModal({ isOpenAdd,
                 <CloseButton onClick={hideOpenAdd} ></CloseButton>
                 </Modal.Header>
                 <Modal.Body style={{ border: '1px solid #ece9ea'}}>
-                <Form>
-                    <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
-                        <Form.Label column sm="2">
-                        <b>ID: </b> 
-                        </Form.Label>
-                        <Col sm="10">
-                        <Form.Control plaintext readOnly defaultValue={id}/>
-                        </Col>
-                    </Form.Group>
+                <div className="row">
+                        <div className="col-md-6" >
+                        <Form.Group as={Row} className="mb-3" controlId="formBasicEmail">
+                            <Form.Label column sm="4">
+                                <b>Student ID:</b>
+                            </Form.Label>
+                            <Col sm="8">
+                                <Form.Control plaintext readOnly defaultValue={"id"}/>
+                            </Col>
+                        </Form.Group>
 
+                        <Form.Group as={Row} className="mb-3" controlId="formBasicEmail">
+                            <Form.Label column sm="4">
+                                <b>Fullname:</b>
+                            </Form.Label>
+                            <Col sm="8">
+                                <Form.Control 
+                                    required
+                                    type="text" 
+                                    placeholder="Enter fullname..." 
+                                    value={addFormData.fullName}
+                                    name="fullName"
+                                    onChange = {handleAddFormChange}                         
+                                />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3" controlId="formBasicEmail">
+                            <Form.Label column sm="4">
+                                <b>Birth Date:</b>
+                            </Form.Label>
+                            <Col sm="8">
+                                <Form.Control 
+                                    required
+                                    type="text" 
+                                    placeholder="Enter birthday..." 
+                                    value={addFormData.dob}
+                                    name="dob"
+                                    onChange = {handleAddFormChange}                         
+                                />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3" controlId="formBasicEmail">
+                            <Form.Label column sm="4">
+                                <b>Signup Date:</b>
+                            </Form.Label>
+                            <Col sm="8">
+                                <Form.Control 
+                                    required
+                                    type="text" 
+                                    placeholder="Enter signupdate..." 
+                                    value={addFormData.signupDate}
+                                    name="signupDate"
+                                    onChange = {handleAddFormChange}                         
+                                />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3" controlId="formBasicEmail">
+                            <Form.Label column sm="4">
+                                <b>Family contact:</b>
+                            </Form.Label>
+                            <Col sm="8">
+                                <Form.Control 
+                                    required
+                                    type="text" 
+                                    placeholder="Enter familycontact..." 
+                                    value={addFormData.familyContact}
+                                    name="familyContact"
+                                    onChange = {handleAddFormChange}                         
+                                />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3" controlId="formBasicEmail">
+                            <Form.Label column sm="4">
+                                <b>Parent email:</b>
+                            </Form.Label>
+                            <Col sm="8">
+                                <Form.Control 
+                                    required
+                                    type="text" 
+                                    placeholder="Enter parentemail..." 
+                                    value={addFormData.parentEmail}
+                                    name="parentEmail"
+                                    onChange = {handleAddFormChange}                         
+                                />
+                            </Col>
+                        </Form.Group>
 
-                    <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
-                        <Form.Label column sm="2">
-                        <b>Status:</b>
-                        </Form.Label>
-                        <Col sm="10">
-                        <Form.Control plaintext readOnly defaultValue={"Processing"} />
-                        </Col>
-                    </Form.Group>
-
-                    <Form.Group as={Row} className="mb-3" controlId="formBasicSelect">
-                        <Form.Label column sm="2">
-                            <b>Skill:</b>
-                        </Form.Label>
-                        <Col sm="10">
-                    
-                            <Form.Control 
-                                as="select"
-                                value={updateSkill}
-                                onChange = {e => setUpdateSkill(e.target.value)}
-                                >
-                                <option>-- Select Skill --</option>
-                                <option value="React">React</option>
-                                <option value="Java">Java</option>
-                                <option value="NodeJS">NodeJS</option>
-                                <option value=".NET">.NET</option>
-                                <option value="C#">C#</option>
-                                <option value="General">General</option>
-                            </Form.Control>
-                        </Col>
-                    </Form.Group>
-
-                    <Form.Group as={Row} className="mb-3" controlId="formBasicSelect">
-                        <Form.Label column sm="2">
-                            <b>Level:</b>
-                        </Form.Label>
-                        <Col sm="10">
-                            <Form.Control 
-                                as="select"
-                                value={updateLevel}
-                                onChange = {e => setUpdateLevel(e.target.value)}
-                                >
-                                <option>-- Select Level --</option>
-                                <option value="Remember - Understand">Remember - Understand</option>
-                                <option value="Apply">Apply</option>
-                                <option value="Analysis - Avaluation">Analysis - Avaluation</option>
-                                <option value="Creation">Creation</option>
-                            </Form.Control>
-                        </Col>
-                    </Form.Group>
-
-                    <Form.Group as={Row} className="mb-3" controlId="formBasicEmail">
-                        <Form.Label column sm="2">
-                            <b>Question:</b>
-                        </Form.Label>
-                        <Form.Control 
-                            type="text" 
-                            placeholder="Enter question..." 
-                            value={updateQuestion}
-                            onChange = {e => setUpdateQuestion(e.target.value)}
-                        />
-                    </Form.Group>
-
-                    <Form.Group as={Row} className="mb-3" controlId="formBasicEmail">
-                        <Form.Label column sm="2">
-                            <b>Answer:</b>
-                        </Form.Label>
-                        <Form.Control 
-                            type="text" 
-                            placeholder="Enter Answer..."
-                            value={updateAnswer} 
-                            onChange = {e => setUpdateAnswer(e.target.value)}
-                        />
-                    </Form.Group>
-
-                
-                </Form>
+                        <Form.Group as={Row} className="mb-3" controlId="formBasicEmail">
+                            <Form.Label column sm="4">
+                                <b>Phone number:</b>
+                            </Form.Label>
+                            <Col sm="8">
+                                <Form.Control 
+                                    required
+                                    type="text" 
+                                    placeholder="Enter phonenumber..." 
+                                    value={addFormData.phoneNum}
+                                    name="phoneNum"
+                                    onChange = {handleAddFormChange}                         
+                                />
+                            </Col>
+                        </Form.Group>
+                        
+                        <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
+                            <Form.Label column sm="4">
+                                <b>Student status:</b>
+                            </Form.Label>
+                            <Col sm="8">
+                                <Form.Control 
+                                    required
+                                    as="select"
+                                    name="status"
+                                    >
+                                    <option key='blankChoice' hidden value>-- Select Status --</option>
+                                    {moduleList.map((module , key ) => (
+                                            <option key={key} value={module}>{module}</option>
+                                    ))}
+                                </Form.Control>
+                            </Col>
+                        </Form.Group> 
+                                    </div>
+                                    <div className="col-md-6">  
+                                        <div className="row" style={{display: 'flex', justifyContent:'flex-end'}}>  
+                                            <div className="col-md-7">
+                                                <p><b>Courses Purchased </b> </p>
+                                                
+                                            </div>
+                                            <div className="col-md-3 text-end">
+                                                <p><b>Term </b> </p>
+                                                
+                                            </div>      
+                                        </div>  
+                                    </div>
+                    </div>    
                 </Modal.Body>
                 <Modal.Footer style={{display: "flex",justifyContent: 'flex-end', marginTop: "10px"}}>
-                <Button 
-                    variant="secondary" 
-                    onClick={hideOpenAdd}
-                    style={{marginRight: '10px'}}
-                    className="btn-fill">
-                    Close
-                </Button>
                 <Button 
                     variant="primary" 
                     className="btn-fill"
                     onClick={onSubmitAdd}
-                    style={{paddingLeft:'22px', paddingRight: '22px'}}
+                    style={{marginRight: '10px', paddingLeft:'22px', paddingRight: '22px'}}
                     >
                     Add
+                </Button>
+                <Button 
+                    variant="secondary" 
+                    onClick={hideOpenAdd}
+                    className="btn-fill">
+                    Close
                 </Button>
                 </Modal.Footer>
             </Modal>

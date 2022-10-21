@@ -7,7 +7,7 @@ function DeleteStudentModal({isOpenDelete, hideOpenDelete, selectedRows, onSumbi
             <Modal 
                 show={isOpenDelete} 
                 onHide={hideOpenDelete}
-                size="lg"
+                size="xl"
                 // fullscreen={true}
                 >
                 <Modal.Header style={{padding: '0 24px', display: 'flex', justifyContent:'space-between'}}>
@@ -21,7 +21,7 @@ function DeleteStudentModal({isOpenDelete, hideOpenDelete, selectedRows, onSumbi
                     <p><b>Number student: </b>{selectedRows.length} </p>
                     <p style={{fontWeight: 'bold'}}>Student IDs: </p>
                     <div style={{maxHeight:'250px', overflowY: 'scroll', border: '1px solid #ece9ea'}}>  
-                    <ol>{selectedRows.map(a=>(<li key={a}>{"N"+a}</li>))}</ol>
+                    <ul>{selectedRows.map(a=>(<li key={a}>{a}</li>))}</ul>
                     </div>
 
                 </Modal.Body>

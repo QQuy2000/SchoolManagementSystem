@@ -5,17 +5,22 @@ import AddStudentModal from "./Modal/AddStudentModal";
 import DeleteStudentModal from "./Modal/DeleteStudentModal";
 import './Student.css'
 import { Button,Badge } from "react-bootstrap";
+import { useSelector, useDispatch } from "react-redux";
+import NotificationAlert from "react-notification-alert";
+import { fetchStudentList } from "redux/studentSlice";
+import { listStudent } from "redux/selectors/studentSelector/studentSelector";
 function handleNameClick(e){
 
 }
 const BadgeSkill = ({ values }) => {
   return (
       <>
-          {values.map((course, id) => {
+          {values ?  ( values.map((course, id) => {
               return (
                   <Badge key={id} bg="secondary" className="me-1 mb-1" style={{ fontSize: '0.85em' }}>{course.name} {' '}</Badge>
               );
-          })}
+          })) : (<p>null</p>)} 
+          
       </>
   );
 };
@@ -39,6 +44,7 @@ const BadgeStatus = ({ values }) => {
   );
 };
 function Student() {
+  const dispatch = useDispatch()
   const columns = React.useMemo(
     () => [
           {
@@ -71,7 +77,7 @@ function Student() {
           },
           {
             Header: "Name",
-            accessor: "fullname",
+            accessor: "fullName",
             Filter: () => null,
             Cell: row => (
               <div style={{display:'flex', justifyContent:'center'}}>
@@ -84,21 +90,43 @@ function Student() {
           },
           {
             Header: "Course",
-            accessor: "course",
-            Filter: () => null,
-            Cell: ({ cell: { value } }) => <BadgeSkill values={value} />,
+            // accessor: "course",
+            // Filter: () => null,
+            // Cell: ({ cell: { value } }) => <BadgeSkill values={value} />,
+            Cell: row => (
+              <div style={{display:'flex', justifyContent:'center'}}>
+                 
+              </div>
+              ),
             width: '35%',
 
           },
         ],
     []
   );
+
+  const notificationAlertRef = React.useRef(null);
+  const notify = (place, message, type, icon) => {
+    let notifyoptions = {};
+    notifyoptions = {
+        place: place,
+        message: message,
+        type: type,
+        icon: icon,
+        autoDismiss: 4,
+    };
+    notificationAlertRef.current.notificationAlert(notifyoptions);
+  };
+
+  const studentList = useSelector(listStudent)
+  
+
   //Get data
   const [data, setData] = React.useState([])
 
   //Store data in Modal when select in row(detail and edit question)
   const [dataModal, setDataModal] = React.useState({})
-
+  const [localData, setLocalData] = React.useState([])
   //Modal Edit question
   const [id, setId] = React.useState(null)
   const [updateQuestion, setUpdateQuestion] = React.useState("")
@@ -107,8 +135,15 @@ function Student() {
   const [updateStatus, setUpdateStatus] = React.useState("")
   const [updateLevel, setUpdateLevel] = React.useState("")
   const [selectedRows, setSelectedRows] = React.useState([])
+  const [isOpen, setIsOpen] = React.useState(false);
 
-
+  function getLocal() {
+    fetch("http://localhost:8081/students").then((result) => {
+        result.json().then((resp)=>{
+          setLocalData(resp)
+        })
+    })
+  }
   function getResource() {
     fetch("https://62c7db500f32635590cba090.mockapi.io/resources").then((result) => {
         result.json().then((resp)=>{
@@ -119,11 +154,13 @@ function Student() {
 
   useEffect(() => {
     getResource()
-  },[data])
+    getLocal()
+    dispatch(fetchStudentList())
+  },[])
 
 
   //Modal detail question
-  const [isOpen, setIsOpen] = React.useState(false);
+  
 //Handle Modal Detail question
   const hideModal = () => {
     setIsOpen(false);
@@ -138,9 +175,8 @@ function Student() {
   const [isOpenAdd, setIsOenAdd] = React.useState(false)
   const handleOpenAdd = () => {
       setIsOenAdd(true)
-      setUpdateStatus("Processing")
-      const newID = ~~data[data.length - 1].id + 1;
-      setId(newID)
+      // const newID = ~~data[data.length - 1].id + 1;
+      // setId(newID)
 
   }
   const hideOpenAdd = () => {
@@ -225,7 +261,7 @@ function Student() {
   return (
     <>
 
-    <TableStudent columns={columns} data={data} selectedRows={selectedRows} setSelectedRows={setSelectedRows} handleOpenAdd={handleOpenAdd} handleOpenDelete={handleOpenDelete}/>
+    <TableStudent columns={columns} data={studentList} selectedRows={selectedRows} setSelectedRows={setSelectedRows} handleOpenAdd={handleOpenAdd} handleOpenDelete={handleOpenDelete}/>
      
 
     {/* Modal Detail Question  */}
@@ -235,15 +271,6 @@ function Student() {
     <AddStudentModal 
         isOpenAdd = {isOpenAdd} 
         hideOpenAdd = {hideOpenAdd} 
-        id = {id} 
-        updateSkill = {updateSkill} 
-        setUpdateSkill = {setUpdateSkill}
-        updateLevel = {updateLevel}
-        setUpdateLevel = {setUpdateLevel}
-        updateQuestion = {updateQuestion}
-        setUpdateQuestion = {setUpdateQuestion}
-        updateAnswer = {updateAnswer}
-        setUpdateAnswer = {setUpdateAnswer}
         onSubmitAdd = {onSubmitAdd}
     />
 

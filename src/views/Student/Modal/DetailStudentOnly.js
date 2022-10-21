@@ -15,12 +15,12 @@ const DetailStudentOnly = ({dataModal, BadgeStatus}) => {
             </div>              
             <div className="col-md-6">
                 <p>{dataModal.id} </p>
-                <p>{dataModal.fullname} </p>
-                <p>{dataModal.birthday} </p>
-                <p>{dataModal.signupdate} </p>
-                <p>{dataModal.familycontact} </p>
-                <p><u>{dataModal.parenemail}</u></p>
-                <p>{dataModal.phonenumber} </p>
+                <p>{dataModal.fullName} </p>
+                <p>{dataModal.dob} </p>
+                <p>{dataModal.signupDate} </p>
+                <p>{dataModal.familyContact} </p>
+                <p><u>{dataModal.parentEmail}</u></p>
+                <p>{dataModal.phoneNum} </p>
                 <p><BadgeStatus values={dataModal.status} /> </p>
             </div>
         </div>

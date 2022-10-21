@@ -34,8 +34,8 @@ const EditStudent = ({dataModal, editFormData, handleEditFormChange}) => {
                         required
                         type="text" 
                         placeholder="Enter fullname..." 
-                        value={editFormData.fullname}
-                        name="fullname"
+                        value={editFormData.fullName}
+                        name="fullName"
                         onChange = {handleEditFormChange}                         
                     />
                 </Col>
@@ -49,8 +49,8 @@ const EditStudent = ({dataModal, editFormData, handleEditFormChange}) => {
                         required
                         type="text" 
                         placeholder="Enter birthday..." 
-                        value={editFormData.birthday}
-                        name="birthday"
+                        value={editFormData.dob}
+                        name="dob"
                         onChange = {handleEditFormChange}                         
                     />
                 </Col>
@@ -64,8 +64,8 @@ const EditStudent = ({dataModal, editFormData, handleEditFormChange}) => {
                         required
                         type="text" 
                         placeholder="Enter signupdate..." 
-                        value={editFormData.signupdate}
-                        name="signupdate"
+                        value={editFormData.signupDate}
+                        name="signupDate"
                         onChange = {handleEditFormChange}                         
                     />
                 </Col>
@@ -79,8 +79,8 @@ const EditStudent = ({dataModal, editFormData, handleEditFormChange}) => {
                         required
                         type="text" 
                         placeholder="Enter familycontact..." 
-                        value={editFormData.familycontact}
-                        name="familycontact"
+                        value={editFormData.familyContact}
+                        name="familyContact"
                         onChange = {handleEditFormChange}                         
                     />
                 </Col>
@@ -94,8 +94,8 @@ const EditStudent = ({dataModal, editFormData, handleEditFormChange}) => {
                         required
                         type="text" 
                         placeholder="Enter parentemail..." 
-                        value={editFormData.parenemail}
-                        name="parenemail"
+                        value={editFormData.parentEmail}
+                        name="parentEmail"
                         onChange = {handleEditFormChange}                         
                     />
                 </Col>
@@ -110,8 +110,8 @@ const EditStudent = ({dataModal, editFormData, handleEditFormChange}) => {
                         required
                         type="text" 
                         placeholder="Enter phonenumber..." 
-                        value={editFormData.phonenumber}
-                        name="phonenumber"
+                        value={editFormData.phoneNum}
+                        name="phoneNum"
                         onChange = {handleEditFormChange}                         
                     />
                 </Col>
