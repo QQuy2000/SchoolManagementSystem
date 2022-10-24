@@ -33,7 +33,6 @@ export const fetchStudentList = createAsyncThunk(
         if(res?.success === false && res.success != null){
             return thunkAPI.rejectWithValue(res.response)
         }
-        // console.log(res.data)
         return res.data
     }
 )

@@ -8,13 +8,13 @@ import 'views/Student/Modal/css/DetailStudentModal.css'
 const BadgeStatus = ({ values }) => {
     let color;
     switch (values) {
-        case "Active":
+        case "active":
             color = "success"
             break;
-        case "Inactive":
+        case "inactive":
             color = "danger"
             break;
-        case "Trial":
+        case "trial":
             color = "warning"
             break;
     }
@@ -137,45 +137,13 @@ function DetailStudentModal({isOpen, hideModal, dataModal}){
                             </div>
                         </div>
                     </div>
-                    <div className="row">
-                        <div className="col-md-6" >
-                            
-                            {
-                                editStudent ? (<EditStudent dataModal={dataModal} editFormData={editFormData} handleEditFormChange={handleEditFormChange}/>) : (
-                                    <DetailStudentOnly dataModal={dataModal} BadgeStatus={BadgeStatus}/>  
-                                )
-                            }
-                            
-                            
-                        </div>
-                        <div className="col-md-6">  
-                            <div className="row" style={{display: 'flex', justifyContent:'flex-end'}}>  
-                                <div className="col-md-7">
-                                    <p><b>Courses Purchased </b> </p>
-                                    {dataModal.course && dataModal.course.map((c, i) => ( 
-                                        <p key={i} >{c.name} </p>
-                                    ))}
-                                </div>
-                                <div className="col-md-3 text-end">
-                                    <p><b>Term </b> </p>
-                                    {dataModal.course && dataModal.course.map((c, i) => ( 
-                                        <p key={i}>{c.term} </p>
-                                    ))}
-                                </div>      
-                            </div>  
-                        </div>
-                    </div>      
+                        {
+                            editStudent ? (<EditStudent dataModal={dataModal} editFormData={editFormData} handleEditFormChange={handleEditFormChange}/>) : (
+                                <DetailStudentOnly dataModal={dataModal} BadgeStatus={BadgeStatus}/>  
+                            )
+                        }
                 </Modal.Body>
                 <Modal.Footer style={{display: 'flex', justifyContent: 'flex-end',marginTop: "10px"}}>
-                    {/* <div>
-                        <Button 
-                        variant="primary" 
-                        onClick={hideModal}
-                        className="btn-fill"
-                        >
-                            OK
-                        </Button>
-                    </div> */}
                 </Modal.Footer>
             </Modal>
         </>

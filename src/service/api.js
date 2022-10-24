@@ -8,7 +8,7 @@ export const useApi = (baseUrl = "localhost", useToken = false) => {
       request.baseURL = baseUrl;
       request.headers.post["Content-Type"] = "x-www-form-urlencoded";
       // request.headers.post["Content-Type"] = "application/json";
-      console.log("config", request.headers);
+      // console.log("config", request.headers);
       if (token) {
         // axios.defaults.headers.common['Authorization'] = `Beare ${token}`
         request.headers["Authorization"] = `Beare ${token}`;

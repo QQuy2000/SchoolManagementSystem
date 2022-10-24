@@ -17,7 +17,7 @@ const BadgeSkill = ({ values }) => {
       <>
           {values ?  ( values.map((course, id) => {
               return (
-                  <Badge key={id} bg="secondary" className="me-1 mb-1" style={{ fontSize: '0.85em' }}>{course.name} {' '}</Badge>
+                  <Badge key={id} bg="secondary" className="me-1 mb-1" style={{ fontSize: '0.85em' }}>{course.courseName} {' '}</Badge>
               );
           })) : (<p>null</p>)} 
           
@@ -27,13 +27,13 @@ const BadgeSkill = ({ values }) => {
 const BadgeStatus = ({ values }) => {
   let color;
   switch (values) {
-      case "Active":
+      case "active":
           color = "success"
           break;
-      case "Inactive":
+      case "inactive":
           color = "danger"
           break;
-      case "Trial":
+      case "trial":
           color = "warning"
           break;
   }
@@ -90,14 +90,14 @@ function Student() {
           },
           {
             Header: "Course",
-            // accessor: "course",
-            // Filter: () => null,
-            // Cell: ({ cell: { value } }) => <BadgeSkill values={value} />,
-            Cell: row => (
-              <div style={{display:'flex', justifyContent:'center'}}>
+            accessor: "listCourse",
+            Filter: () => null,
+            Cell: ({ cell: { value } }) => <BadgeSkill values={value} />,
+            // Cell: row => (
+            //   <div style={{display:'flex', justifyContent:'center'}}>
                  
-              </div>
-              ),
+            //   </div>
+            //   ),
             width: '35%',
 
           },
