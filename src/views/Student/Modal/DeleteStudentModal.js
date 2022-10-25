@@ -1,12 +1,23 @@
 import React from "react";
 import { Button, CloseButton, Modal} from "react-bootstrap";
-
-function DeleteStudentModal({isOpenDelete, hideOpenDelete, selectedRows, onSumbitDeleteSelected}){
+import { deleteStudentList } from "redux/studentSlice";
+import { useDispatch } from "react-redux";
+function DeleteStudentModal({isOpenDelete, hideOpenDelete, selectedRows, setIsOenDelete, notify}){
+    const dispatch = useDispatch();
+    const handleDeleteSubmit = () => {
+        // console.log(selectedRows)
+        dispatch(deleteStudentList({data: selectedRows, notify: notify}))
+        handleCloseDelete()
+    }
+    const handleCloseDelete = () => {
+        setIsOenDelete(false)
+    }
+    
     return (
         <>
             <Modal 
                 show={isOpenDelete} 
-                onHide={hideOpenDelete}
+                onHide={handleCloseDelete}
                 size="xl"
                 // fullscreen={true}
                 >
@@ -15,7 +26,7 @@ function DeleteStudentModal({isOpenDelete, hideOpenDelete, selectedRows, onSumbi
                     style={{textTransform: 'uppercase', fontWeight: 'bold'}}
                     className="fw-semibold fs-3 text-danger"
                 >Delete Students</Modal.Title>
-                <CloseButton onClick={hideOpenDelete} ></CloseButton>
+                <CloseButton onClick={handleCloseDelete} ></CloseButton>
                 </Modal.Header>
                 <Modal.Body style={{ border: '1px solid #ece9ea'}}>
                     <p><b>Number student: </b>{selectedRows.length} </p>
@@ -30,7 +41,7 @@ function DeleteStudentModal({isOpenDelete, hideOpenDelete, selectedRows, onSumbi
                     <div>
                         <Button 
                             variant="danger" 
-                            onClick={onSumbitDeleteSelected}
+                            onClick={handleDeleteSubmit}
                             style={{marginRight: '10px'}}
                             className="btn-fill"
                         >
@@ -39,7 +50,7 @@ function DeleteStudentModal({isOpenDelete, hideOpenDelete, selectedRows, onSumbi
 
                         <Button 
                             variant="secondary" 
-                            onClick={hideOpenDelete}
+                            onClick={handleCloseDelete}
                             style={{paddingLeft:'20px', paddingRight: '20px'}}
                             className="btn-fill"
                         >

@@ -1,4 +1,9 @@
 import React from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchLogin } from 'redux/loginSlice';
+import { isLoginStage, isLoadingLogin } from 'redux/selectors/loginSelector/loginSelector';
 import {
   MDBBtn,
   MDBContainer,
@@ -11,12 +16,53 @@ import {
   MDBIcon
 }
 from 'mdb-react-ui-kit';
+import { Button, Spinner } from 'react-bootstrap';
 
 function Login() {
+  const dispatch = useDispatch();
+  const isLoginIn = useSelector(isLoginStage);
+  const isLoading = useSelector(isLoadingLogin);
+  const history = useHistory();
+  useEffect(() =>{
+    if (isLoginIn) history.push("/admin");
+  })
+
+  const [dataLogin, setDataLogin] = useState( {
+    username: "",
+    password: "",
+  })
+
+const handleDataLoginChange = (event) => {
+  event.preventDefault();
+
+  const fieldName = event.target.getAttribute("name");
+  const fieldValue = event.target.value;
+
+  const newFormData = {...dataLogin};
+  newFormData[fieldName] = fieldValue;
+  setDataLogin(newFormData);
+}
+
+const handleSubmitLogin = () => {
+  // console.log(dataLogin);
+  dispatch(fetchLogin({data:dataLogin}))
+}
   return (
     <MDBContainer fluid className="p-3 my-5" >
-
-      <MDBRow style={{display:'flex', justifyContent: 'center', marginTop: '5vh'}}>
+      { isLoading ? ( 
+      <div 
+            className="d-flex flex-column justify-content-center align-items-center"
+            style={{height: '100px', marginBottom: '20px'}}
+          >
+          <Spinner
+            variant="primary"
+            animation="border"
+            role="status"
+            className="position-absolute"
+            style={{ height: "60px", width: "60px" }}
+          ></Spinner>
+        </div>):
+      (<MDBRow style={{display:'flex', justifyContent: 'center', marginTop: '5vh'}}>
 
         <MDBCol col='10' md='6'className='text-center text-md-start d-flex flex-column justify-content-center'>
 
@@ -30,40 +76,46 @@ function Login() {
         </MDBCol>
 
         <MDBCol col='4' md='4' style={{paddingRight: '50px'}}>
-          
-<MDBCard className='bg-white my-5 mx-auto' style={{borderRadius: '1rem', maxWidth: '500px'}}>
+          <MDBCard className='bg-white my-5 mx-auto' style={{borderRadius: '1rem', maxWidth: '500px'}}>
             <MDBCardBody className='p-5 w-100 d-flex flex-column'>
 
               <h2 className="fw-bold mb-2 text-center text-primary">Sign in</h2>
               <p className="text-white-50 mb-3">Please enter your login and password!</p>
 
-              <MDBInput wrapperClass='mb-4 w-100' placeholder='Enter your email...' label='Email address' id='formControlLg' type='email' size="lg"/>
-              <MDBInput wrapperClass='mb-4 w-100' placeholder='Enter your password...' label='Password' id='formControlLg' type='password' size="lg"/>
+              <MDBInput 
+                wrapperClass='mb-4 w-100' 
+                placeholder='Enter your username...' 
+                label='username'  
+                name='username'
+                onChange={(e) => handleDataLoginChange(e)}
+                type='text' 
+                size="lg"
+              />
+              <MDBInput 
+                wrapperClass='mb-4 w-100' 
+                placeholder='Enter your password...' 
+                label='Password'  
+                name='password'
+                onChange={(e) => handleDataLoginChange(e)}
+                type='password' 
+                size="lg"
+              />
 
               {/* <MDBCheckbox name='flexCheck' id='flexCheckDefault' className='mb-4' label='Remember password' /> */}
 
-              <MDBBtn className="btn-fill" size='lg'>
+              <Button 
+                className="btn-fill" 
+                size='lg'
+                onClick={handleSubmitLogin}
+              >
                 Login
-              </MDBBtn>
-
-              {/* <hr className="my-4" />
-
-              <MDBBtn className="mb-2 w-100 btn-fill" color='danger' size="lg" >
-                <MDBIcon fab icon="google" className="mx-2"/>
-                Sign in with google
-              </MDBBtn>
-
-              <MDBBtn className="mb-4 w-100 btn-fill" size="lg" >
-                <MDBIcon fab icon="facebook-f" className="mx-2"/>
-                Sign in with facebook
-              </MDBBtn> */}
+              </Button>
 
             </MDBCardBody>
           </MDBCard>
-
           </MDBCol> 
       </MDBRow>
-
+    )}
     </MDBContainer>
   );
 }

@@ -9,6 +9,8 @@ import { useSelector, useDispatch } from "react-redux";
 import NotificationAlert from "react-notification-alert";
 import { fetchStudentList } from "redux/studentSlice";
 import { listStudent } from "redux/selectors/studentSelector/studentSelector";
+import { editFormDataChange } from "redux/studentSlice";
+
 function handleNameClick(e){
 
 }
@@ -81,7 +83,19 @@ function Student() {
             Filter: () => null,
             Cell: row => (
               <div style={{display:'flex', justifyContent:'center'}}>
-                 <a className='detail-student' onClick={() =>handleDataModal(row.row.original)}> 
+                 <a className='detail-student' onClick={() =>{handleDataModal(row.row.original)
+                                                              dispatch(editFormDataChange({
+                                                                id: row.row.original.id,
+                                                                fullName: row.row.original.fullName,
+                                                                dob: row.row.original.dob,
+                                                                signupDate: row.row.original.signupDate,
+                                                                phoneNum: row.row.original.phoneNum,
+                                                                familyContact: row.row.original.familyContact,
+                                                                parentEmail: row.row.original.parentEmail,
+                                                                status: row.row.original.status,
+                                                                avatar: null,
+                                                            }))
+                                                              }}> 
                     {row.value}
                  </a>
               </div>
@@ -93,11 +107,6 @@ function Student() {
             accessor: "listCourse",
             Filter: () => null,
             Cell: ({ cell: { value } }) => <BadgeSkill values={value} />,
-            // Cell: row => (
-            //   <div style={{display:'flex', justifyContent:'center'}}>
-                 
-            //   </div>
-            //   ),
             width: '35%',
 
           },
@@ -137,24 +146,18 @@ function Student() {
   const [selectedRows, setSelectedRows] = React.useState([])
   const [isOpen, setIsOpen] = React.useState(false);
 
-  function getLocal() {
-    fetch("http://localhost:8081/students").then((result) => {
-        result.json().then((resp)=>{
-          setLocalData(resp)
-        })
-    })
-  }
-  function getResource() {
-    fetch("https://62c7db500f32635590cba090.mockapi.io/resources").then((result) => {
-        result.json().then((resp)=>{
-            setData(resp)
-        })
-    })
-  }
+  
+  // function getResource() {
+  //   fetch("https://62c7db500f32635590cba090.mockapi.io/resources").then((result) => {
+  //       result.json().then((resp)=>{
+  //           setData(resp)
+  //       })
+  //   })
+  // }
 
   useEffect(() => {
-    getResource()
-    getLocal()
+    // getResource()
+   
     dispatch(fetchStudentList())
   },[])
 
@@ -189,33 +192,7 @@ function Student() {
       setUpdateStatus("")
   }
 
-  function onSubmitAdd(){
-    let item = {
-        skill: updateSkill,
-        question: updateQuestion,
-        answer: updateAnswer,
-        status: updateStatus,
-        level: updateLevel}
-    fetch("https://62c7db500f32635590cba090.mockapi.io/resources",{
-        method: 'POST',
-        headers: {
-            'Accept' : 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(item)
-    }).then((result) => {
-        result.json().then(()=>{
-            getResource()
-            setIsOenAdd(false)
-        })
-    })
-    setId(null)
-    setUpdateQuestion("")
-    setUpdateAnswer("")
-    setUpdateSkill("")
-    setUpdateLevel("")
-    setUpdateStatus("")
-  }
+
   
   {/* Modal Delete */}    
   const [isOpenDelete, setIsOenDelete] = React.useState(false)
@@ -260,18 +237,25 @@ function Student() {
 
   return (
     <>
-
+    <NotificationAlert ref={notificationAlertRef} />
     <TableStudent columns={columns} data={studentList} selectedRows={selectedRows} setSelectedRows={setSelectedRows} handleOpenAdd={handleOpenAdd} handleOpenDelete={handleOpenDelete}/>
      
 
     {/* Modal Detail Question  */}
-    <DetailStudentModal isOpen={isOpen} hideModal={hideModal} dataModal={dataModal} />
+    <DetailStudentModal 
+      isOpen={isOpen} 
+      hideModal={hideModal} 
+      dataModal={dataModal} 
+      notify = {notify}
+      setIsOpen={setIsOpen}
+      />
 
     {/* Modal Add */}
     <AddStudentModal 
         isOpenAdd = {isOpenAdd} 
         hideOpenAdd = {hideOpenAdd} 
-        onSubmitAdd = {onSubmitAdd}
+        setIsOenAdd = {setIsOenAdd}
+        notify = {notify}
     />
 
     {/* Modal Delete Selected Questions*/}  
@@ -279,7 +263,8 @@ function Student() {
         isOpenDelete={isOpenDelete} 
         hideOpenDelete={hideOpenDelete} 
         selectedRows={selectedRows}
-        onSumbitDeleteSelected={onSumbitDeleteSelected}
+        setIsOenDelete={setIsOenDelete}
+        notify = {notify}
         />
     
     </>

@@ -1,10 +1,15 @@
 import React, {useState} from "react";
 import { Button, CloseButton, Modal, Badge} from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCirclePlus, faTrashCan, faPencilSquare, faSquareCheck, faSquareXmark } from "@fortawesome/free-solid-svg-icons";
+import { faCirclePlus, faTrashCan, faPencilSquare, faSquareCheck, faSquareXmark, fas } from "@fortawesome/free-solid-svg-icons";
 import DetailStudentOnly from "./DetailStudentOnly";
 import EditStudent from "./EditStudent";
 import 'views/Student/Modal/css/DetailStudentModal.css'
+import { UpdateStudent, deleteOneStudent } from "redux/studentSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { editFormStudent, errorsStudent, idDeleteStudent } from "redux/selectors/studentSelector/studentSelector";
+import { editFormDataChange, errorsChange, idDeleteChange} from "redux/studentSlice";
+import Validation from "../Validation";
 const BadgeStatus = ({ values }) => {
     let color;
     switch (values) {
@@ -25,53 +30,47 @@ const BadgeStatus = ({ values }) => {
         
     );
   };
-function DetailStudentModal({isOpen, hideModal, dataModal}){
+function DetailStudentModal({isOpen, hideModal, dataModal, notify, setIsOpen}){
+    const dispatch = useDispatch();
     const [editStudent, setEditStudent] = useState(false);
-    const [editFormData, setEditFormData] = useState({
-        fullName: "",
-        dob: "",
-        signupDate: "",
-        phoneNum: "",
-        familyContact: "",
-        parentEmail: "",
-        status: "",
-    })
+    const  editFormData = useSelector(editFormStudent);
+    const errorsForm = useSelector(errorsStudent);
+    const [isDelete, setIsDelete] = useState(false);
     const hanleClickEditBtn = () => {
         setEditStudent(true)
         document.getElementsByClassName("pencil-icon")[0].style.display = 'none';
         document.getElementsByClassName("trash-icon")[0].style.display = 'none';
         document.getElementsByClassName("check-icon")[0].style.display = 'inline-block';
         document.getElementsByClassName("xmark-icon")[0].style.display = 'inline-block';
-        const formValues = {
-            fullName: dataModal.fullName,
-            dob: dataModal.dob,
-            signupDate: dataModal.signupDate,
-            phoneNum: dataModal.phoneNum,
-            familyContact: dataModal.familyContact,
-            parentEmail: dataModal.parentEmail,
-            status: dataModal.status,
-        }
-        setEditFormData(formValues);
     }
 
-    const handleEditFormChange = (event) => {
-        event.preventDefault();
+    const handleEditFormChange = (e) => {
+        dispatch(editFormDataChange({
+            ...editFormData,
+            [e.target.name]: e.target.value}))
 
-        const fieldName = event.target.getAttribute("name");
-        const fieldValue = event.target.value;
-
-        const newFormData = {...editFormData};
-        newFormData[fieldName] = fieldValue;
-
-        setEditFormData(newFormData);
-    }
+        dispatch(errorsChange({
+            ...errorsForm,
+            [e.target.name]: null
+        }))
+      }
 
     const handleEditSubmit = () =>{
-        setEditStudent(false)
-        document.getElementsByClassName("check-icon")[0].style.display = 'none';
-        document.getElementsByClassName("xmark-icon")[0].style.display = 'none';
-        document.getElementsByClassName("pencil-icon")[0].style.display = 'inline-block';
-        document.getElementsByClassName("trash-icon")[0].style.display = 'inline-block';
+        const newErrors = Validation(editFormData);
+        if (Object.keys(newErrors).length > 0) {
+            dispatch(errorsChange(newErrors))
+        }else{
+            setEditStudent(false)
+            document.getElementsByClassName("check-icon")[0].style.display = 'none';
+            document.getElementsByClassName("xmark-icon")[0].style.display = 'none';
+            document.getElementsByClassName("pencil-icon")[0].style.display = 'inline-block';
+            document.getElementsByClassName("trash-icon")[0].style.display = 'inline-block';
+            // console.log(editFormData)
+            dispatch(UpdateStudent({data: editFormData, notify: notify}));
+            // dispatch(editFormDataChange(editFormData));
+            setIsOpen(false)
+        } 
+        
     }
 
     const handleCancelEdit = () => {
@@ -80,20 +79,58 @@ function DetailStudentModal({isOpen, hideModal, dataModal}){
         document.getElementsByClassName("xmark-icon")[0].style.display = 'none';
         document.getElementsByClassName("pencil-icon")[0].style.display = 'inline-block';
         document.getElementsByClassName("trash-icon")[0].style.display = 'inline-block';
-        const formValues = {
-            fullName: "",
-            dob: "",
-            signupDate: "",
-            phoneNum: "",
-            familyContact: "",
-            parentEmail: "",
-            status: "",
-        }
-        setEditFormData(formValues);
+    }
+
+    const hanleSubmitDeleteOne = () => {
+        dispatch(deleteOneStudent({data: dataModal.id, notify: notify}))
+        setIsDelete(false)
+        setIsOpen(false)
+    }
+    const hanldeCancelDelete = () => {
+        setIsDelete(false)
     }
 
     return(
         <>
+
+                <Modal 
+                    show={isDelete} 
+                    onHide={hanldeCancelDelete}
+                    size="sm"              
+                >
+                <Modal.Header style={{padding: '0 24px', display: 'flex', justifyContent:'space-between'}}>
+                <Modal.Title 
+                    style={{textTransform: 'uppercase', fontWeight: 'bold'}}
+                    className="fw-semibold fs-3 text-danger"
+                >ARE YOU SURE TO DELETE STUDENT?</Modal.Title>
+                {/* <CloseButton onClick={hanldeCancelDelete} ></CloseButton> */}
+                </Modal.Header>
+                
+                <Modal.Footer style={{display: 'flex', flexDirection: 'column'}}>
+                    <p style={{fontWeight: 'bold'}}>DO YOU WANT TO DELETE ?</p>
+                    <div>
+                        <Button 
+                            variant="danger" 
+                            onClick={hanleSubmitDeleteOne}
+                            style={{marginRight: '10px'}}
+                            className="btn-fill"
+                        >
+                            YES
+                        </Button>
+
+                        <Button 
+                            variant="secondary" 
+                            onClick={hanldeCancelDelete}
+                            style={{paddingLeft:'20px', paddingRight: '20px'}}
+                            className="btn-fill"
+                        >
+                            NO
+                        </Button>
+                    </div>
+                </Modal.Footer>
+            </Modal>
+
+
              <Modal 
                 show={isOpen} 
                 onHide={hideModal}
@@ -132,13 +169,17 @@ function DetailStudentModal({isOpen, hideModal, dataModal}){
                             <FontAwesomeIcon onClick={handleEditSubmit} className="check-icon" icon={faSquareCheck} />
                             </div>
                             <div className="button-delete-student">
-                                <FontAwesomeIcon className="trash-icon" icon={faTrashCan} />
+                                <FontAwesomeIcon 
+                                    onClick={() => {setIsDelete(true)
+                                                   }} 
+                                    className="trash-icon"
+                                    icon={faTrashCan} />
                                 <FontAwesomeIcon onClick={handleCancelEdit} className="xmark-icon" icon={faSquareXmark} />
                             </div>
                         </div>
                     </div>
                         {
-                            editStudent ? (<EditStudent dataModal={dataModal} editFormData={editFormData} handleEditFormChange={handleEditFormChange}/>) : (
+                            editStudent ? (<EditStudent dataModal={dataModal} editFormData={editFormData} handleEditFormChange={handleEditFormChange} errorsForm={errorsForm}/>) : (
                                 <DetailStudentOnly dataModal={dataModal} BadgeStatus={BadgeStatus}/>  
                             )
                         }

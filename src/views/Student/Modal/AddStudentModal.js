@@ -1,35 +1,62 @@
 import React, {useState} from "react";
 import { Button, Form, CloseButton, Modal, Row, Col } from "react-bootstrap";
-
+import { useDispatch, useSelector } from "react-redux";
+import { createStudent } from "redux/studentSlice";
+import { addFormStudent, errorsStudent } from "redux/selectors/studentSelector/studentSelector";
+import { addFormDataChange, errorsChange } from "redux/studentSlice";
+import Validation from "../Validation";
 function AddStudentModal({ isOpenAdd, 
                     hideOpenAdd, 
-                    onSubmitAdd
+                    setIsOenAdd,
+                    notify
                     }){
-    const moduleList = ["Active", "Inactive", "Trial"]
-    const [addFormData, setAddFormData] = useState({
-        fullname: "",
-        birthday: "",
-        signupdate: "",
-        familycontact: "",
-        parenemail: "",
-        phonenumber: "",
-    })
-    const handleAddFormChange = (event) => {
-        event.preventDefault();
+    const dispatch = useDispatch();
+    const moduleList = ["active", "inactive", "trial"]
 
-        const fieldName = event.target.getAttribute("name");
-        const fieldValue = event.target.value;
+    const addFormData = useSelector(addFormStudent);
+    const errorsForm = useSelector(errorsStudent);
+    const handChange = (e) => {
+        dispatch(addFormDataChange({
+            ...addFormData,
+            [e.target.name]: e.target.value}))
 
-        const newFormData = {...addFormData};
-        newFormData[fieldName] = fieldValue;
+        dispatch(errorsChange({
+            ...errorsForm,
+            [e.target.name]: null
+        }))
+      }
 
-        setAddFormData(newFormData) 
+    const handleSubmitAdd = (event) => {
+        event.preventDefault()
+        const newErrors = Validation(addFormData);
+        if (Object.keys(newErrors).length > 0) {
+            dispatch(errorsChange(newErrors))
+        }else{
+            // console.log(addFormData)
+            dispatch(createStudent({data: addFormData, notify: notify}))
+        } 
+        hanldeClose();
+    }
+
+    const hanldeClose = () => {
+        dispatch(addFormDataChange({
+            fullName: "",
+            dob: "",
+            signupDate: "",
+            phoneNum: "",
+            familyContact: "",
+            parentEmail: "",
+            status: "",
+            avatar: null,
+        }))
+        dispatch(errorsChange({}))
+        setIsOenAdd(false)
     }
     return (
         <>
             <Modal 
                 show={isOpenAdd} 
-                onHide={hideOpenAdd}
+                onHide={hanldeClose}
                 size="xl"
                 // fullscreen={true}
                 >
@@ -38,7 +65,7 @@ function AddStudentModal({ isOpenAdd,
                     style={{textTransform: 'uppercase', fontWeight: 'bold'}}
                     className="fw-semibold fs-3 text-primary"
                 >ADD STUDENTS</Modal.Title>
-                <CloseButton onClick={hideOpenAdd} ></CloseButton>
+                <CloseButton onClick={hanldeClose} ></CloseButton>
                 </Modal.Header>
                 <Modal.Body style={{ border: '1px solid #ece9ea'}}>
                 <div className="row">
@@ -48,7 +75,7 @@ function AddStudentModal({ isOpenAdd,
                                 <b>Student ID:</b>
                             </Form.Label>
                             <Col sm="8">
-                                <Form.Control plaintext readOnly defaultValue={"id"}/>
+                                <Form.Control plaintext readOnly defaultValue={" "}/>
                             </Col>
                         </Form.Group>
 
@@ -63,8 +90,12 @@ function AddStudentModal({ isOpenAdd,
                                     placeholder="Enter fullname..." 
                                     value={addFormData.fullName}
                                     name="fullName"
-                                    onChange = {handleAddFormChange}                         
+                                    onChange = {(e) => handChange(e)} 
+                                    isInvalid={!!errorsForm.fullName}                        
                                 />
+                                <Form.Control.Feedback type='invalid'>
+                                    {errorsForm.fullName}
+                                </Form.Control.Feedback>
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3" controlId="formBasicEmail">
@@ -74,12 +105,16 @@ function AddStudentModal({ isOpenAdd,
                             <Col sm="8">
                                 <Form.Control 
                                     required
-                                    type="text" 
+                                    type="date" 
                                     placeholder="Enter birthday..." 
                                     value={addFormData.dob}
                                     name="dob"
-                                    onChange = {handleAddFormChange}                         
+                                    onChange = {(e) => handChange(e)} 
+                                    isInvalid={!!errorsForm.dob}                        
                                 />
+                                <Form.Control.Feedback type='invalid'>
+                                    {errorsForm.dob}
+                                </Form.Control.Feedback>
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3" controlId="formBasicEmail">
@@ -89,12 +124,16 @@ function AddStudentModal({ isOpenAdd,
                             <Col sm="8">
                                 <Form.Control 
                                     required
-                                    type="text" 
+                                    type="date" 
                                     placeholder="Enter signupdate..." 
                                     value={addFormData.signupDate}
                                     name="signupDate"
-                                    onChange = {handleAddFormChange}                         
+                                    onChange = {(e) => handChange(e)} 
+                                    isInvalid={!!errorsForm.signupDate}                        
                                 />
+                                <Form.Control.Feedback type='invalid'>
+                                    {errorsForm.signupDate}
+                                </Form.Control.Feedback>
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3" controlId="formBasicEmail">
@@ -108,8 +147,12 @@ function AddStudentModal({ isOpenAdd,
                                     placeholder="Enter familycontact..." 
                                     value={addFormData.familyContact}
                                     name="familyContact"
-                                    onChange = {handleAddFormChange}                         
+                                    onChange = {(e) => handChange(e)} 
+                                    isInvalid={!!errorsForm.familyContact}                        
                                 />
+                                <Form.Control.Feedback type='invalid'>
+                                    {errorsForm.familyContact}
+                                </Form.Control.Feedback>
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3" controlId="formBasicEmail">
@@ -123,8 +166,12 @@ function AddStudentModal({ isOpenAdd,
                                     placeholder="Enter parentemail..." 
                                     value={addFormData.parentEmail}
                                     name="parentEmail"
-                                    onChange = {handleAddFormChange}                         
+                                    onChange = {(e) => handChange(e)} 
+                                    isInvalid={!!errorsForm.parentEmail}                        
                                 />
+                                <Form.Control.Feedback type='invalid'>
+                                    {errorsForm.parentEmail}
+                                </Form.Control.Feedback>
                             </Col>
                         </Form.Group>
 
@@ -139,8 +186,12 @@ function AddStudentModal({ isOpenAdd,
                                     placeholder="Enter phonenumber..." 
                                     value={addFormData.phoneNum}
                                     name="phoneNum"
-                                    onChange = {handleAddFormChange}                         
+                                    onChange = {(e) => handChange(e)} 
+                                    isInvalid={!!errorsForm.phoneNum}                        
                                 />
+                                <Form.Control.Feedback type='invalid'>
+                                    {errorsForm.phoneNum}
+                                </Form.Control.Feedback>
                             </Col>
                         </Form.Group>
                         
@@ -153,12 +204,15 @@ function AddStudentModal({ isOpenAdd,
                                     required
                                     as="select"
                                     name="status"
+                                    onChange = {(e) => handChange(e)}
+                                    isInvalid={!!errorsForm.status}
                                     >
                                     <option key='blankChoice' hidden value>-- Select Status --</option>
                                     {moduleList.map((module , key ) => (
                                             <option key={key} value={module}>{module}</option>
                                     ))}
                                 </Form.Control>
+                                <div style={{ width: '100%', fontSize: '.875em', marginTop: '.25rem', color: '#dc3545' }}>{errorsForm.status}</div>
                             </Col>
                         </Form.Group> 
                                     </div>
@@ -180,14 +234,14 @@ function AddStudentModal({ isOpenAdd,
                 <Button 
                     variant="primary" 
                     className="btn-fill"
-                    onClick={onSubmitAdd}
+                    onClick={handleSubmitAdd}
                     style={{marginRight: '10px', paddingLeft:'22px', paddingRight: '22px'}}
                     >
                     Add
                 </Button>
                 <Button 
                     variant="secondary" 
-                    onClick={hideOpenAdd}
+                    onClick={hanldeClose}
                     className="btn-fill">
                     Close
                 </Button>

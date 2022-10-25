@@ -1,8 +1,8 @@
 import React from "react";
 import { Button, Form, CloseButton, Modal, Row, Col } from "react-bootstrap";
 
-const EditStudent = ({dataModal, editFormData, handleEditFormChange}) => {
-    const moduleList = ["Active", "Inactive", "Trial"]
+const EditStudent = ({dataModal, editFormData, handleEditFormChange, errorsForm}) => {
+    const moduleList = ["active", "inactive", "trial"]
     return(
 
         <div className="row" >
@@ -28,8 +28,12 @@ const EditStudent = ({dataModal, editFormData, handleEditFormChange}) => {
                                 placeholder="Enter fullname..." 
                                 value={editFormData.fullName}
                                 name="fullName"
-                                onChange = {handleEditFormChange}                         
+                                onChange = {(e) => handleEditFormChange(e)}  
+                                isInvalid={!!errorsForm.fullName}                       
                             />
+                            <Form.Control.Feedback type='invalid'>
+                                    {errorsForm.fullName}
+                            </Form.Control.Feedback>
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} className="mb-3" controlId="formBasicEmail">
@@ -39,12 +43,16 @@ const EditStudent = ({dataModal, editFormData, handleEditFormChange}) => {
                         <Col sm="8">
                             <Form.Control 
                                 required
-                                type="text" 
+                                type="date" 
                                 placeholder="Enter birthday..." 
                                 value={editFormData.dob}
                                 name="dob"
-                                onChange = {handleEditFormChange}                         
+                                onChange = {(e) => handleEditFormChange(e)}  
+                                isInvalid={!!errorsForm.dob}                           
                             />
+                            <Form.Control.Feedback type='invalid'>
+                                {errorsForm.dob}
+                            </Form.Control.Feedback>
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} className="mb-3" controlId="formBasicEmail">
@@ -54,12 +62,16 @@ const EditStudent = ({dataModal, editFormData, handleEditFormChange}) => {
                         <Col sm="8">
                             <Form.Control 
                                 required
-                                type="text" 
+                                type="date" 
                                 placeholder="Enter signupdate..." 
                                 value={editFormData.signupDate}
                                 name="signupDate"
-                                onChange = {handleEditFormChange}                         
+                                 onChange = {(e) => handleEditFormChange(e)}  
+                                 isInvalid={!!errorsForm.signupDate}                        
                             />
+                            <Form.Control.Feedback type='invalid'>
+                                {errorsForm.signupDate}
+                            </Form.Control.Feedback>
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} className="mb-3" controlId="formBasicEmail">
@@ -73,8 +85,12 @@ const EditStudent = ({dataModal, editFormData, handleEditFormChange}) => {
                                 placeholder="Enter familycontact..." 
                                 value={editFormData.familyContact}
                                 name="familyContact"
-                                onChange = {handleEditFormChange}                         
+                                 onChange = {(e) => handleEditFormChange(e)} 
+                                 isInvalid={!!errorsForm.familyContact}                        
                             />
+                            <Form.Control.Feedback type='invalid'>
+                                {errorsForm.familyContact}
+                            </Form.Control.Feedback>
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} className="mb-3" controlId="formBasicEmail">
@@ -88,8 +104,12 @@ const EditStudent = ({dataModal, editFormData, handleEditFormChange}) => {
                                 placeholder="Enter parentemail..." 
                                 value={editFormData.parentEmail}
                                 name="parentEmail"
-                                onChange = {handleEditFormChange}                         
+                                 onChange = {(e) => handleEditFormChange(e)}
+                                 isInvalid={!!errorsForm.parentEmail}                          
                             />
+                             <Form.Control.Feedback type='invalid'>
+                                    {errorsForm.parentEmail}
+                                </Form.Control.Feedback>
                         </Col>
                     </Form.Group>
 
@@ -104,8 +124,12 @@ const EditStudent = ({dataModal, editFormData, handleEditFormChange}) => {
                                 placeholder="Enter phonenumber..." 
                                 value={editFormData.phoneNum}
                                 name="phoneNum"
-                                onChange = {handleEditFormChange}                         
+                                onChange = {(e) => handleEditFormChange(e)}
+                                isInvalid={!!errorsForm.phoneNum}                          
                             />
+                             <Form.Control.Feedback type='invalid'>
+                                    {errorsForm.phoneNum}
+                                </Form.Control.Feedback>
                         </Col>
                     </Form.Group>
                     
@@ -118,11 +142,15 @@ const EditStudent = ({dataModal, editFormData, handleEditFormChange}) => {
                                 required
                                 as="select"
                                 name="status"
+                                value={editFormData.status}
+                                onChange = {(e) => handleEditFormChange(e)} 
+                                isInvalid={!!errorsForm.status}
                                 >
                                 {moduleList.map((module , key ) => (
                                         <option key={key} value={module}>{module}</option>
                                 ))}
                             </Form.Control>
+                            <div style={{ width: '100%', fontSize: '.875em', marginTop: '.25rem', color: '#dc3545' }}>{errorsForm.status}</div>
                         </Col>
                     </Form.Group> 
                 </div>
